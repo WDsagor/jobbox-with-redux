@@ -9,7 +9,7 @@ const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
-  const { isError, error } = useSelector((state) => state.auth);
+  const { isError, error, email } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
@@ -32,13 +32,16 @@ const Signup = () => {
     if (isError) {
       toast.error(error);
     }
-  }, [isError, error]);
+    if (email) {
+      naviget("/login");
+      console.log();
+    }
+  }, [isError, error, naviget, email]);
 
   const onSubmit = (data) => {
     // console.log(data);
     dispatch(createUser({ email: data.email, password: data.password }));
     reset();
-    naviget("/login");
   };
 
   return (
