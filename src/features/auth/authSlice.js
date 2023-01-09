@@ -47,6 +47,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.user.email = "";
+      state.user.role = "";
     },
     setUser: (state, { payload }) => {
       state.user.email = payload;

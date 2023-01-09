@@ -48,10 +48,8 @@ const EmployerRegistration = () => {
   // }, []);
 
   const onSubmit = (data) => {
-    // console.log(data);
     userRegister({ ...data, role: "employer" });
     reset();
-    // navigate("/dashboard");
   };
 
   return (

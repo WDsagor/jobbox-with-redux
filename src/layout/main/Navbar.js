@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
 import auth from "../../firebase/firebase.config";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
   const {
     user: { email, role },
   } = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (email & !role) {
+      navigate("/register");
+    }
+  }, [navigate, email, role]);
   const handelSignOut = () => {
     signOut(auth).then(() => {
       dispatch(logout());

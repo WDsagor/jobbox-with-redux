@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { useUserRegisterMutation } from "../../features/auth/authApi";
 
 const CandidateRegistration = () => {
-  const [countries, setCountries] = useState([]);
-  const { handleSubmit, register, control } = useForm();
+  const {
+    user: { email },
+  } = useSelector((state) => state.auth);
+  const { handleSubmit, register, control, reset } = useForm({
+    defaultValues: { email },
+  });
   const term = useWatch({ control, name: "term" });
-  console.log(term);
+  const [countries, setCountries] = useState([]);
+  const [userRegister] = useUserRegisterMutation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,7 +24,8 @@ const CandidateRegistration = () => {
   }, []);
 
   const onSubmit = (data) => {
-    console.log(data);
+    userRegister({ ...data, role: "candidate" });
+    reset();
   };
 
   return (
@@ -49,7 +57,13 @@ const CandidateRegistration = () => {
             <label className="mb-2" htmlFor="email">
               Email
             </label>
-            <input type="email" id="email" {...register("email")} />
+            <input
+              disabled
+              className=" cursor-not-allowed"
+              type="email"
+              id="email"
+              {...register("email")}
+            />
           </div>
           <div className="flex flex-col w-full max-w-xs">
             <h1 className="mb-3">Gender</h1>
