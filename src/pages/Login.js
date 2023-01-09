@@ -8,9 +8,12 @@ import loginImage from "../assets/login.svg";
 import { byGoogle, loginUser } from "../features/auth/authSlice";
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
-  const { email, isLoading, isError, error } = useSelector(
-    (state) => state.auth
-  );
+  const {
+    user: { email },
+    isLoading,
+    isError,
+    error,
+  } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

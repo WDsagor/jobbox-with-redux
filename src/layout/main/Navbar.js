@@ -9,7 +9,9 @@ import auth from "../../firebase/firebase.config";
 const Navbar = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { email, role } = useSelector((state) => state.auth);
+  const {
+    user: { email, role },
+  } = useSelector((state) => state.auth);
   const handelSignOut = () => {
     signOut(auth).then(() => {
       dispatch(logout());
@@ -30,13 +32,14 @@ const Navbar = () => {
             Jobs
           </Link>
         </li>
-        {email && role ? (
+        {email && role && (
           <li>
             <Link className="hover:text-primary transition-all" to="/dashboard">
               Dashboard
             </Link>
           </li>
-        ) : (
+        )}
+        {email && !role && (
           <li>
             <Link className="hover:text-primary transition-all" to="/register">
               Get Started
