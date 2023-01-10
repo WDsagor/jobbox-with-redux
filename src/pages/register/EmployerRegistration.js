@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
 import { useUserRegisterMutation } from "../../features/auth/authApi";
 import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 
 const EmployerRegistration = () => {
   // const [countries, setCountries] = useState([]);
 
   const {
-    user: { email },
+    isLoading,
+    user: { email, role },
   } = useSelector((state) => state.auth);
   const { handleSubmit, register, control, reset } = useForm({
     defaultValues: { email },
@@ -46,6 +48,12 @@ const EmployerRegistration = () => {
   //     .then((res) => res.json())
   //     .then((data) => setCountries(data));
   // }, []);
+  useEffect(() => {
+    if (!isLoading && email && role === "employer") {
+      toast.success(`As a ${role} register success`);
+      navigate("/dashboard");
+    }
+  }, [isLoading, email, navigate, role]);
 
   const onSubmit = (data) => {
     userRegister({ ...data, role: "employer" });
@@ -64,7 +72,7 @@ const EmployerRegistration = () => {
         <form
           className="bg-secondary/20 shadow-lg p-10 rounded-2xl flex flex-wrap gap-3 max-w-3xl justify-between"
           onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="w-full text-2xl text-primary mb-5">Candidate</h1>
+          <h1 className="w-full text-2xl text-primary mb-5">Employer</h1>
           <div className="flex flex-col w-full max-w-xs">
             <label className="mb-2" htmlFor="firstName">
               First Name

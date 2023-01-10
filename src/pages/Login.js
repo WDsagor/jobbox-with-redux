@@ -27,11 +27,12 @@ const Login = () => {
   };
   useEffect(() => {
     if (!isLoading && email) {
+      toast.success("Log in Success");
       navigate("/");
     }
   }, [isLoading, email, navigate]);
   useEffect(() => {
-    if (isError) {
+    if (isError && error) {
       toast.error(error);
     }
   }, [isError, error]);

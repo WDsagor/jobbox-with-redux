@@ -4,13 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useUserRegisterMutation } from "../../features/auth/authApi";
+import { toast } from "react-hot-toast";
 
 const CandidateRegistration = () => {
   const {
-    user: { email },
+    isLoading,
+    user: { email, role },
   } = useSelector((state) => state.auth);
   const { handleSubmit, register, control, reset } = useForm({
-    defaultValues: { email },
+    defaultValues: { email: email },
   });
   const term = useWatch({ control, name: "term" });
   const [countries, setCountries] = useState([]);
@@ -22,7 +24,12 @@ const CandidateRegistration = () => {
       .then((res) => res.json())
       .then((data) => setCountries(data));
   }, []);
-
+  useEffect(() => {
+    if (!isLoading && email && role === "candidate") {
+      toast.success(`As a ${role} register success`);
+      navigate("/dashboard");
+    }
+  }, [isLoading, email, navigate, role]);
   const onSubmit = (data) => {
     userRegister({ ...data, role: "candidate" });
     reset();
