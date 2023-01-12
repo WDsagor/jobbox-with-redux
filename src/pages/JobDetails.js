@@ -2,12 +2,16 @@ import React from "react";
 
 import meeting from "../assets/meeting.jpg";
 import { BsArrowReturnRight, BsArrowRightShort } from "react-icons/bs";
-import { useGetJobByIDQuery } from "../features/job/jobApi";
-import { useParams } from "react-router-dom";
+import { useApplyMutation, useGetJobByIDQuery } from "../features/job/jobApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 const JobDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const data = useGetJobByIDQuery(id);
-  console.log(data?.data?.data);
+  const { user } = useSelector((state) => state.auth);
+  const [jobApply] = useApplyMutation();
   const {
     companyName,
     position,
@@ -21,9 +25,28 @@ const JobDetails = () => {
     responsibilities,
     overview,
     queries,
+    _id,
+    applicants,
   } = data?.data?.data || {};
-  console.log(position);
-
+  const handelApply = () => {
+    if (user?.role === "employer") {
+      toast.error("You are not Candidate");
+      return;
+    }
+    if (user?.role === "") {
+      navigate("/register");
+      return;
+    }
+    const data = {
+      userId: user?._id,
+      jobId: _id,
+      email: user?.email,
+    };
+    console.log(data);
+    jobApply(data);
+    toast.success("apply Success");
+  };
+  console.log(applicants);
   return (
     <div className="pt-14 grid grid-cols-12 gap-5">
       <div className="col-span-9 mb-10">
@@ -33,11 +56,21 @@ const JobDetails = () => {
         <div className="space-y-5">
           <div className="flex justify-between items-center mt-5">
             <h1 className="text-xl font-semibold text-primary">{position}</h1>
-            <button className="btn">Apply</button>
+            {applicants?.filter(
+              (applicant) => applicant?.email === user?.email
+            )?.[0] ? (
+              <button className="btn" disabled>
+                Applied
+              </button>
+            ) : (
+              <button className="btn" onClick={handelApply}>
+                Apply
+              </button>
+            )}
           </div>
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Overview</h1>
-            <p>{overview}</p>
+            <p className=" text-justify">{overview}</p>
           </div>
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Skills</h1>

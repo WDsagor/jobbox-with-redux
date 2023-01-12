@@ -24,7 +24,7 @@ const AddJob = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    postJob(data);
+    postJob({ ...data, applicants: [], queries: [] });
   };
 
   return (
@@ -46,7 +46,7 @@ const AddJob = () => {
             Company Name
           </label>
           <input
-            className="cursor-not-allowed"
+            className=""
             type="text"
             id="companyName"
             {...register("companyName")}
