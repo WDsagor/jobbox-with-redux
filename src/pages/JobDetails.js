@@ -60,7 +60,7 @@ const JobDetails = () => {
               (applicant) => applicant?.email === user?.email
             )?.[0] ? (
               <button className="btn" disabled>
-                Applied
+                Allready applied
               </button>
             ) : (
               <button className="btn" onClick={handelApply}>

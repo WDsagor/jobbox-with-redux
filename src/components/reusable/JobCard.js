@@ -7,9 +7,7 @@ const JobCard = ({ jobData }) => {
     jobData || {};
 
   return (
-    <div
-      key={_id}
-      className="border border-gray-300 shadow-xl p-5 rounded-2xl text-primary">
+    <div className="border border-gray-300 shadow-xl p-5 rounded-2xl text-primary">
       <div className="flex justify-between  text-primary">
         <div>
           <p className="text-xl">{position}</p>
